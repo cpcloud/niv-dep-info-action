@@ -1,0 +1,5 @@
+dist/
+lib/
+node_modules/
+nix/sources.json
+.pre-commit-config.yaml
