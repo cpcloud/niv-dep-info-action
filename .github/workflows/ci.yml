@@ -1,0 +1,74 @@
+name: Continuous Integration
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup NodeJS
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - run: npm install
+      - run: npm run build
+      - run: npm run format-check
+      - run: npm run lint
+      - run: npm run package
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dep:
+          - nixpkgs
+          - pre-commit-hooks
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Test
+        uses: ./
+        with:
+          sources: ${{ matrix.repo.owner }}
+          dependency: ${{ matrix.dep }}
+  release:
+    runs-on: ubuntu-latest
+    concurrency: release
+    needs:
+      - build
+      - test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: Install CI dependencies
+        run: npm ci
+
+      - name: Install runtime dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Package assets
+        run: npm run package
+
+      - name: Release
+        env:
+          GIT_CREDENTIALS: ${{ secrets.SEMREL }}
+          GITHUG_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
