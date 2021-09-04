@@ -35,7 +35,6 @@ jobs:
       - name: Test
         uses: ./
         with:
-          sources: ${{ matrix.repo.owner }}
           dependency: ${{ matrix.dep }}
   release:
     runs-on: ubuntu-latest
