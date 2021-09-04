@@ -18,7 +18,8 @@ interface Dependency {
   try {
     const dependency = core.getInput("dependency", { required: true });
     const sources = core.getInput("sources", { required: false });
-    const dep: Dependency = JSON.parse(await fs.readFile(sources))[dependency];
+    const fileContents = await fs.readFile(sources, { encoding: "utf8" });
+    const dep: Dependency = JSON.parse(fileContents)[dependency];
 
     for (const [key, value] of Object.entries(dep)) {
       core.setOutput(key, value);
