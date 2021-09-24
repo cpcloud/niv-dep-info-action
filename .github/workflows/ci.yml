@@ -29,10 +29,12 @@ jobs:
     strategy:
       matrix:
         dep:
-          - repo: nixpkgs
+          - name: nixpkgs
+            repo: nixpkgs
             owner: NixOS
 
-          - repo: pre-commit-hooks
+          - name: pre-commit-hooks
+            repo: pre-commit-hooks.nix
             owner: cachix
     steps:
       - name: checkout
@@ -42,7 +44,7 @@ jobs:
         uses: ./
         id: test
         with:
-          dependency: ${{ matrix.dep.repo }}
+          dependency: ${{ matrix.dep.name }}
 
       - name: check owner
         run: if [ "${{ steps.test.outputs.owner }}" != "${{ matrix.dep.owner }}" ]; then exit 1; fi
