@@ -14,7 +14,7 @@ interface Dependency {
   url_template: string; // eslint-disable-line camelcase
 }
 
-(async function run(): Promise<void> {
+(async function (): Promise<void> {
   try {
     const dependency = core.getInput("dependency", { required: true });
     const sources = core.getInput("sources", { required: false });
@@ -22,7 +22,9 @@ interface Dependency {
     const dep: Dependency = JSON.parse(fileContents)[dependency];
 
     for (const [key, value] of Object.entries(dep)) {
+      core.info("before");
       core.setOutput(key, value);
+      core.info("after");
     }
   } catch (error) {
     core.setFailed(`Action failed with error: ${error}`); // eslint-disable-line i18n-text/no-en
