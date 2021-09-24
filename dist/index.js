@@ -571,14 +571,16 @@ var exports = __webpack_exports__;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __nccwpck_require__(186);
 const fs = __nccwpck_require__(747);
-(async function run() {
+(async function () {
     try {
         const dependency = core.getInput("dependency", { required: true });
         const sources = core.getInput("sources", { required: false });
         const fileContents = fs.readFileSync(sources, { encoding: "utf8" });
         const dep = JSON.parse(fileContents)[dependency];
         for (const [key, value] of Object.entries(dep)) {
+            core.info("before");
             core.setOutput(key, value);
+            core.info("after");
         }
     }
     catch (error) {
