@@ -578,9 +578,9 @@ const fs = __nccwpck_require__(747);
         const fileContents = fs.readFileSync(sources, { encoding: "utf8" });
         const dep = JSON.parse(fileContents)[dependency];
         for (const [key, value] of Object.entries(dep)) {
-            core.info("before");
+            // see https://github.com/actions/toolkit/issues/777
+            // for why each call prints a newline
             core.setOutput(key, value);
-            core.info("after");
         }
     }
     catch (error) {
