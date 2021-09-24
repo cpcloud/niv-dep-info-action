@@ -22,9 +22,9 @@ interface Dependency {
     const dep: Dependency = JSON.parse(fileContents)[dependency];
 
     for (const [key, value] of Object.entries(dep)) {
-      core.info("before");
+      // see https://github.com/actions/toolkit/issues/777
+      // for why each call prints a newline
       core.setOutput(key, value);
-      core.info("after");
     }
   } catch (error) {
     core.setFailed(`Action failed with error: ${error}`); // eslint-disable-line i18n-text/no-en
