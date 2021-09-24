@@ -29,16 +29,26 @@ jobs:
     strategy:
       matrix:
         dep:
-          - nixpkgs
-          - pre-commit-hooks
+          - repo: nixpkgs
+            owner: NixOS
+
+          - repo: pre-commit-hooks
+            owner: cachix
     steps:
       - name: checkout
         uses: actions/checkout@v2
 
       - name: test
         uses: ./
+        id: test
         with:
-          dependency: ${{ matrix.dep }}
+          dependency: ${{ matrix.dep.repo }}
+
+      - name: check owner
+        run: if [ "${{ steps.test.outputs.owner }}" != "${{ matrix.dep.owner }}" ]; then exit 1; fi
+
+      - name: check repo
+        run: if [ "${{ steps.test.outputs.repo }}" != "${{ matrix.dep.repo }}" ]; then exit 1; fi
   release:
     runs-on: ubuntu-latest
     concurrency: release
