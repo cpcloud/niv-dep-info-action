@@ -1,5 +1,5 @@
 import * as core from "@actions/core";
-import * as fs from "fs/promises";
+import * as fs from "fs";
 
 interface Dependency {
   branch: string;
@@ -18,9 +18,7 @@ interface Dependency {
   try {
     const dependency = core.getInput("dependency", { required: true });
     const sources = core.getInput("sources", { required: false });
-    const fileContents = await fs.readFile(sources, {
-      encoding: "utf8",
-    });
+    const fileContents = fs.readFileSync(sources, { encoding: "utf8" });
     const dep: Dependency = JSON.parse(fileContents)[dependency];
 
     for (const [key, value] of Object.entries(dep)) {
