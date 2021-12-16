@@ -1579,14 +1579,6 @@ module.exports = require("fs");
 
 /***/ }),
 
-/***/ 292:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("fs/promises");
-
-/***/ }),
-
 /***/ 685:
 /***/ ((module) => {
 
@@ -1689,14 +1681,12 @@ var exports = __webpack_exports__;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __nccwpck_require__(186);
-const fs = __nccwpck_require__(292);
+const fs = __nccwpck_require__(147);
 (async function () {
     try {
         const dependency = core.getInput("dependency", { required: true });
         const sources = core.getInput("sources", { required: false });
-        const fileContents = await fs.readFile(sources, {
-            encoding: "utf8",
-        });
+        const fileContents = fs.readFileSync(sources, { encoding: "utf8" });
         const dep = JSON.parse(fileContents)[dependency];
         for (const [key, value] of Object.entries(dep)) {
             // see https://github.com/actions/toolkit/issues/777
