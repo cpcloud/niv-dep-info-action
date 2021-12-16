@@ -1,5 +1,5 @@
 import * as core from "@actions/core";
-import * as fs from "fs";
+import * as fs from "fs/promises";
 
 interface Dependency {
   branch: string;
@@ -11,14 +11,16 @@ interface Dependency {
   sha256: string;
   type: string;
   url: string;
-  url_template: string; // eslint-disable-line camelcase
+  url_template: string;
 }
 
 (async function (): Promise<void> {
   try {
     const dependency = core.getInput("dependency", { required: true });
     const sources = core.getInput("sources", { required: false });
-    const fileContents = fs.readFileSync(sources, { encoding: "utf8" });
+    const fileContents = await fs.readFile(sources, {
+      encoding: "utf8",
+    });
     const dep: Dependency = JSON.parse(fileContents)[dependency];
 
     for (const [key, value] of Object.entries(dep)) {
