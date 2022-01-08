@@ -31,5 +31,5 @@ outputs:
   url_template:
     description: "The template used to construct the `url` field"
 runs:
-  using: "node12"
+  using: "node16"
   main: "dist/index.js"
