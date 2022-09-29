@@ -1,6 +1,6 @@
 {
   "name": "niv-dep-info-action",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "private": true,
   "description": "Get information about niv dependencies",
   "main": "lib/main.js",
